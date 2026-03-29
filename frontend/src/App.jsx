@@ -4,6 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
   RadarChart, PolarGrid, PolarAngleAxis, Radar, LineChart, Line
 } from "recharts"
+import { Analytics } from "@vercel/analytics/react"
 import GradientMenu from "./components/ui/gradient-menu"
 import RadialOrbitalTimeline from "./components/ui/radial-orbital-timeline"
 import "./App.css"
@@ -1183,6 +1184,7 @@ export default function App() {
           </div>
         </div>
       </footer>
+      <Analytics />
     </div>
   )
 }
