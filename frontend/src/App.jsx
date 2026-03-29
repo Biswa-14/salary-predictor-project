@@ -20,6 +20,13 @@ const DEFAULT_FORM = {
   work_year:        2026,
 }
 
+const MOBILE_NAV_ITEMS = [
+  { id: "home", label: "Home" },
+  { id: "features", label: "Features" },
+  { id: "predictor", label: "Predict" },
+  { id: "about", label: "About" },
+]
+
 const CURRENCIES = {
   USD: { symbol:"$",   label:"US Dollar",         flag:"🇺🇸" },
   INR: { symbol:"₹",   label:"Indian Rupee",       flag:"🇮🇳" },
@@ -597,8 +604,21 @@ export default function App() {
   const [navScrolled, setNavScrolled] = useState(false)
   const [period,      setPeriod]      = useState("year")
   const [applyCol,    setApplyCol]    = useState(true)
+  const [isOnline,    setIsOnline]    = useState(
+    typeof navigator === "undefined" ? true : navigator.onLine
+  )
+  const [preferNativeSelect, setPreferNativeSelect] = useState(false)
   const resultRef = useRef(null)
   useScrollReveal()
+
+  const scrollToSection = useCallback((id) => {
+    if (typeof window === "undefined") return
+    const el = document.getElementById(id)
+    if (!el) return
+    const navOffset = window.innerWidth <= 640 ? 116 : 92
+    const top = el.getBoundingClientRect().top + window.scrollY - navOffset
+    window.scrollTo({ top, behavior: "smooth" })
+  }, [])
 
   // ── Fetch options and FX — no auto-fill ──────────────────────────────────
   useEffect(()=>{
@@ -606,11 +626,43 @@ export default function App() {
       setOptions(res.data)
       setBootError(null)
       }).catch(()=>{
-      setBootError("Unable to load PayLens right now. Please check your connection and try again.")
+      setBootError(
+        navigator?.onLine === false
+          ? "You're offline. Reconnect to load PayLens."
+          : "Unable to load PayLens right now. Please check your connection and try again."
+      )
     })
     axios.get("https://api.exchangerate-api.com/v4/latest/USD")
       .then(r=>setFxRates(r.data.rates)).catch(()=>{})
   },[])
+
+  useEffect(()=>{
+    if(typeof window === "undefined") return
+    const mediaQuery = window.matchMedia("(max-width: 768px), (hover: none) and (pointer: coarse)")
+    const applyPreference = event => setPreferNativeSelect(event.matches)
+    applyPreference(mediaQuery)
+
+    const handleOnline = () => {
+      setIsOnline(true)
+      setBootError(null)
+    }
+    const handleOffline = () => {
+      setIsOnline(false)
+      setBootError("You're offline. Reconnect to load PayLens.")
+    }
+
+    window.addEventListener("online", handleOnline)
+    window.addEventListener("offline", handleOffline)
+    if (typeof mediaQuery.addEventListener === "function") mediaQuery.addEventListener("change", applyPreference)
+    else mediaQuery.addListener(applyPreference)
+
+    return () => {
+      window.removeEventListener("online", handleOnline)
+      window.removeEventListener("offline", handleOffline)
+      if (typeof mediaQuery.removeEventListener === "function") mediaQuery.removeEventListener("change", applyPreference)
+      else mediaQuery.removeListener(applyPreference)
+    }
+  }, [])
 
   useEffect(()=>{
     if(!options || typeof window === "undefined") return
@@ -686,7 +738,11 @@ export default function App() {
       },...h].slice(0,5))
       setTimeout(()=>resultRef.current?.scrollIntoView({behavior:"smooth",block:"start"}),150)
     }catch{
-      setError("Unable to predict right now. Please check your connection and try again.")
+      setError(
+        isOnline
+          ? "Unable to predict right now. Please try again in a moment."
+          : "Unable to predict right now. Please check your connection and try again."
+      )
     }
     finally{setLoading(false)}
   }
@@ -760,30 +816,31 @@ export default function App() {
   }
 
   if(bootError) return <div className="splash"><div className="empty-icon">!</div><p>{bootError}</p></div>
-  if(!options) return <div className="splash"><div className="spinner lg"/><p>Loading PayLens…</p></div>
+  if(!options) return <div className="splash"><div className="spinner lg"/><p>{isOnline ? "Getting PayLens ready..." : "Waiting for a connection..."}</p></div>
 
   return(
     <div className="app" id="home">
       <ScrollProgress/>
 
-        {/* ── NAV ── */}
-        <nav className={`nav ${navScrolled?"nav-scrolled":""}`}>
-          <div className="nav-logo">
+      {/* ── NAV ── */}
+      <nav className={`nav ${navScrolled?"nav-scrolled":""}`}>
+          <button className="nav-logo nav-logo-btn" onClick={()=>scrollToSection("about")} aria-label="Go to about section">
             <BrandLockup variant="nav" />
-          </div>
+          </button>
         <div className="nav-gm-wrap"><GradientMenu/></div>
         <div className="nav-links">
-          <a href="#features">Features</a>
-          <a href="#factors">Factors</a>
-          <a href="#predictor">Predict</a>
-          <a href="#about">About</a>
+          {MOBILE_NAV_ITEMS.map(item=>(
+            <button key={item.id} className="nav-link-btn" onClick={()=>scrollToSection(item.id)}>
+              {item.label}
+            </button>
+          ))}
         </div>
       </nav>
 
       {/* ── HERO ── */}
       <section className="hero">
         <MeshBackground/><ParticleCanvas/>
-        <div className="hero-content">
+          <div className="hero-content">
           <div className="badge-row">
             <span className="badge">Random Forest ML</span>
             <span className="badge">Live FX Rates</span>
@@ -792,8 +849,8 @@ export default function App() {
           <h1>Know Your<br/><span className="gradient-text">Market Worth</span></h1>
           <p>Predict tech salaries across 23 countries — adjusted for taxes, competition, cost of living, demand, inflation and more.</p>
           <div className="hero-actions">
-            <button className="btn-primary" onClick={()=>document.getElementById("predictor")?.scrollIntoView({behavior:"smooth"})}>Predict My Salary</button>
-            <button className="btn-ghost"   onClick={()=>document.getElementById("features")?.scrollIntoView({behavior:"smooth"})}>Explore Features ↓</button>
+            <button className="btn-primary" onClick={()=>scrollToSection("predictor")}>Predict My Salary</button>
+            <button className="btn-ghost"   onClick={()=>scrollToSection("features")}>Explore Features ↓</button>
           </div>
         </div>
         <div className="hero-stats">
@@ -887,18 +944,31 @@ export default function App() {
             <div className="field-grid">
               <label className="field span2">
                 <span>Job Title</span>
-                <input
-                  type="text"
-                  name="job_title"
-                  list="job-title-options"
-                  value={form.job_title}
-                  onChange={handleChange}
-                  placeholder="Search and select a job title…"
-                />
-                <datalist id="job-title-options">
-                  {options.job_titles.map(t=><option key={t} value={t} />)}
-                </datalist>
-                <small className="field-help">Start typing to filter roles like Data Scientist, MLE, or NLP Engineer.</small>
+                {preferNativeSelect ? (
+                  <select name="job_title" value={form.job_title} onChange={handleChange}>
+                    <option value="" disabled>Select a job title…</option>
+                    {options.job_titles.map(t=><option key={t} value={t}>{t}</option>)}
+                  </select>
+                ) : (
+                  <>
+                    <input
+                      type="text"
+                      name="job_title"
+                      list="job-title-options"
+                      value={form.job_title}
+                      onChange={handleChange}
+                      placeholder="Search and select a job title…"
+                    />
+                    <datalist id="job-title-options">
+                      {options.job_titles.map(t=><option key={t} value={t} />)}
+                    </datalist>
+                  </>
+                )}
+                <small className="field-help">
+                  {preferNativeSelect
+                    ? "Use the list to choose the closest job title for your role."
+                    : "Start typing to filter roles like Data Scientist, MLE, or NLP Engineer."}
+                </small>
               </label>
 
               <label className="field">

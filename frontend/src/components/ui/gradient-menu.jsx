@@ -55,7 +55,7 @@ const menuItems = [
     title: 'About',
     gradientFrom: '#ffa9c6',
     gradientTo: '#f434e2',
-    href: 'footer',
+    href: 'about',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
         strokeLinecap="round" strokeLinejoin="round" width="19" height="19">
@@ -69,7 +69,10 @@ const menuItems = [
 export default function GradientMenu() {
   const handleClick = (href) => {
     const el = document.getElementById(href)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
+    if (!el) return
+    const navOffset = 96
+    const top = el.getBoundingClientRect().top + window.scrollY - navOffset
+    window.scrollTo({ top, behavior: 'smooth' })
   }
 
   return (
