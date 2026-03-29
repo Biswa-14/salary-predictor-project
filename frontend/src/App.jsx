@@ -758,7 +758,9 @@ export default function App() {
 
       {/* ── NAV ── */}
       <nav className={`nav ${navScrolled?"nav-scrolled":""}`}>
-        <div className="nav-logo"><span className="nav-logo-badge">$</span>PayLens</div>
+        <div className="nav-logo">
+          <img className="brand-logo brand-logo-nav" src="/paylens-logo.png" alt="PayLens" />
+        </div>
         <div className="nav-gm-wrap"><GradientMenu/></div>
         <div className="nav-links">
           <a href="#features">Features</a>
@@ -1111,11 +1113,11 @@ export default function App() {
       {/* ── ABOUT ── */}
       <section className="about-section" id="about">
         <div className="section-inner">
-          <div className="about-grid">
-            <div className="about-left reveal">
-              <div className="about-avatar">BN</div>
-              <h2>Biswaranjan Nayak</h2>
-              <p className="about-bio">Built PayLens as a full-stack ML project — from raw dataset exploration and model training in Python, to a FastAPI backend with live FX integration, to this React frontend with a 10-factor adjustment engine. The goal: honest, context-aware salary estimates grounded in real economics — not glazed benchmarks.</p>
+            <div className="about-grid">
+              <div className="about-left reveal">
+                <img className="about-avatar" src="/paylens-tab.png" alt="PayLens logo" />
+                <h2>Biswaranjan Nayak</h2>
+                <p className="about-bio">Built PayLens as a full-stack ML project — from raw dataset exploration and model training in Python, to a FastAPI backend with live FX integration, to this React frontend with a 10-factor adjustment engine. The goal: honest, context-aware salary estimates grounded in real economics — not glazed benchmarks.</p>
               <div className="about-links">
                 <a href="https://www.linkedin.com/in/biswaranjan-nayak-063809299/" target="_blank" rel="noreferrer" className="about-link linkedin">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -1163,7 +1165,9 @@ export default function App() {
       {/* ── FOOTER ── */}
       <footer id="footer">
         <div className="footer-inner">
-          <div className="nav-logo"><span className="nav-logo-badge">$</span>PayLens</div>
+          <div className="nav-logo">
+            <img className="brand-logo brand-logo-footer" src="/paylens-logo.png" alt="PayLens" />
+          </div>
           <div className="footer-stack">
             <span>FastAPI</span><span>scikit-learn</span><span>React</span>
             <span>Recharts</span><span>DS Salaries</span><span>exchangerate-api.com</span>
