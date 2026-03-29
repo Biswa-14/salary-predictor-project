@@ -19,10 +19,10 @@ body { font-family:system-ui,-apple-system,sans-serif; background:var(--dark); c
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    NAV
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-.nav { position:fixed; top:3px; left:0; right:0; z-index:999; display:flex; justify-content:space-between; align-items:center; padding:0.9rem 2rem; background:rgba(10,15,30,0.88); backdrop-filter:blur(16px); border-bottom:1px solid var(--glass-b); transition:padding 0.3s; }
-.nav-scrolled { padding:0.5rem 2rem; }
+.nav { position:fixed; top:3px; left:0; right:0; z-index:999; display:flex; justify-content:space-between; align-items:center; padding:0.65rem 2rem; background:rgba(10,15,30,0.88); backdrop-filter:blur(16px); border-bottom:1px solid var(--glass-b); transition:padding 0.3s; }
+.nav-scrolled { padding:0.4rem 2rem; }
 .nav-logo { display:flex; align-items:center; gap:9px; font-weight:800; font-size:1.1rem; color:var(--green); letter-spacing:-0.02em; flex-shrink:0; line-height:0; }
-.brand-lockup { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; line-height:1; }
+.brand-lockup { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; line-height:1; }
 .brand-mark { display:block; object-fit:contain; image-rendering:auto; }
 .brand-wordmark {
   font-family: "Didot", "Bodoni MT", "Times New Roman", serif;
@@ -31,8 +31,8 @@ body { font-family:system-ui,-apple-system,sans-serif; background:var(--dark); c
   color: #d9d6d1;
   text-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 8px 20px rgba(0,0,0,0.22);
 }
-.brand-lockup-nav .brand-mark { width:52px; height:52px; }
-.brand-lockup-nav .brand-wordmark { font-size:1.55rem; }
+.brand-lockup-nav .brand-mark { width:34px; height:34px; }
+.brand-lockup-nav .brand-wordmark { font-size:0.92rem; }
 .brand-lockup-footer .brand-mark { width:42px; height:42px; }
 .brand-lockup-footer .brand-wordmark { font-size:1.2rem; }
 .brand-lockup-about { align-items:flex-start; gap:10px; }
