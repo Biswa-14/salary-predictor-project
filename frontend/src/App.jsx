@@ -238,6 +238,15 @@ function getCountryProfile(code) {
   }
 }
 
+function BrandLockup({ variant = "nav", className = "" }) {
+  return (
+    <div className={`brand-lockup brand-lockup-${variant} ${className}`.trim()}>
+      <img className="brand-mark" src="/paylens-webpage-logo.png" alt="PayLens logo" />
+      <span className="brand-wordmark">PayLens</span>
+    </div>
+  )
+}
+
 function serializeShareState(form, uiState) {
   const params = new URLSearchParams()
   Object.entries(form).forEach(([key, value]) => {
@@ -595,8 +604,8 @@ export default function App() {
     axios.get(`${API}/options`).then(res=>{
       setOptions(res.data)
       setBootError(null)
-    }).catch(()=>{
-      setBootError(`Unable to reach the API at ${API}. Check your backend or set VITE_API_URL before deployment.`)
+      }).catch(()=>{
+      setBootError("Unable to load PayLens right now. Please check your connection and try again.")
     })
     axios.get("https://api.exchangerate-api.com/v4/latest/USD")
       .then(r=>setFxRates(r.data.rates)).catch(()=>{})
@@ -676,7 +685,7 @@ export default function App() {
       },...h].slice(0,5))
       setTimeout(()=>resultRef.current?.scrollIntoView({behavior:"smooth",block:"start"}),150)
     }catch{
-      setError(`Prediction failed. Make sure the backend is reachable at ${API}.`)
+      setError("Unable to predict right now. Please check your connection and try again.")
     }
     finally{setLoading(false)}
   }
@@ -759,7 +768,7 @@ export default function App() {
         {/* ── NAV ── */}
         <nav className={`nav ${navScrolled?"nav-scrolled":""}`}>
           <div className="nav-logo">
-            <img className="brand-logo brand-logo-nav" src="/paylens-ui-logo.png" alt="PayLens" />
+            <BrandLockup variant="nav" />
           </div>
         <div className="nav-gm-wrap"><GradientMenu/></div>
         <div className="nav-links">
@@ -1115,7 +1124,7 @@ export default function App() {
         <div className="section-inner">
             <div className="about-grid">
               <div className="about-left reveal">
-                <img className="about-avatar" src="/paylens-webpage-logo.png" alt="PayLens logo" />
+                <BrandLockup variant="about" className="about-brand" />
                 <h2>Biswaranjan Nayak</h2>
                 <p className="about-bio">Built PayLens as a full-stack ML project — from raw dataset exploration and model training in Python, to a FastAPI backend with live FX integration, to this React frontend with a 10-factor adjustment engine. The goal: honest, context-aware salary estimates grounded in real economics — not glazed benchmarks.</p>
               <div className="about-links">
@@ -1166,7 +1175,7 @@ export default function App() {
       <footer id="footer">
         <div className="footer-inner">
           <div className="nav-logo">
-            <img className="brand-logo brand-logo-footer" src="/paylens-ui-logo.png" alt="PayLens" />
+            <BrandLockup variant="footer" />
           </div>
           <div className="footer-stack">
             <span>FastAPI</span><span>scikit-learn</span><span>React</span>
