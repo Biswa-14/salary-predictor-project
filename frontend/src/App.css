@@ -130,7 +130,14 @@ body { font-family:system-ui,-apple-system,sans-serif; background:var(--dark); c
 .rot-related-btn { padding:3px 9px; font-size:0.65rem; cursor:pointer; background:transparent; color:rgba(255,255,255,0.65); border:1px solid rgba(255,255,255,0.18); border-radius:20px; transition:all 0.15s; white-space:nowrap; }
 .rot-related-btn:hover { background:rgba(255,255,255,0.1); color:#fff; border-color:rgba(255,255,255,0.4); }
 @media (max-width: 640px) {
-  .orbital-wrapper { height: 420px; margin-bottom: 2.25rem; }
+  .orbital-wrapper {
+    height: 420px;
+    margin-bottom: 4.5rem;
+    overflow: visible;
+  }
+  .rot-container {
+    overflow: visible;
+  }
   .rot-label { top: 42px; font-size: 0.62rem; max-width: 78px; white-space: normal; text-align: center; line-height: 1.15; }
   .rot-dot { width: 34px; height: 34px; }
   .rot-card { top: 56px; max-width: calc(100vw - 64px); padding: 10px 12px 12px; }
@@ -145,7 +152,10 @@ body { font-family:system-ui,-apple-system,sans-serif; background:var(--dark); c
   }
 }
 @media (max-width: 420px) {
-  .orbital-wrapper { height: 390px; }
+  .orbital-wrapper {
+    height: 390px;
+    margin-bottom: 4rem;
+  }
   .rot-label { max-width: 66px; font-size: 0.58rem; }
   .rot-card-mobile {
     max-width: min(192px, calc(100vw - 60px));
