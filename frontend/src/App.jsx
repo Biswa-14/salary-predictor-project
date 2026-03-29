@@ -91,7 +91,14 @@ const countryNameFormatter =
     : null
 
 function getCountryLabel(code) {
-  return COUNTRY_FACTORS[code]?.label ?? countryNameFormatter?.of(code) ?? code
+  if (COUNTRY_FACTORS[code]?.label) return COUNTRY_FACTORS[code].label
+  if (!code || !countryNameFormatter) return code
+
+  try {
+    return countryNameFormatter.of(code) ?? code
+  } catch {
+    return code
+  }
 }
 
 const COUNTRY_PROFILE_PRESETS = {
