@@ -31,6 +31,10 @@ print("Model and encoders loaded successfully")
 # Pydantic validates every incoming request automatically.
 # If the React app sends the wrong type, FastAPI returns a
 # clear 422 error before your code even runs.
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 class PredictRequest(BaseModel):
     experience_level: str   # "EN", "MI", "SE", "EX"
     employment_type:  str   # "FT", "PT", "CT", "FL"
