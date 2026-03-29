@@ -756,11 +756,11 @@ export default function App() {
     <div className="app" id="home">
       <ScrollProgress/>
 
-      {/* ── NAV ── */}
-      <nav className={`nav ${navScrolled?"nav-scrolled":""}`}>
-        <div className="nav-logo">
-          <img className="brand-logo brand-logo-nav" src="/paylens-logo.png" alt="PayLens" />
-        </div>
+        {/* ── NAV ── */}
+        <nav className={`nav ${navScrolled?"nav-scrolled":""}`}>
+          <div className="nav-logo">
+            <img className="brand-logo brand-logo-nav" src="/paylens-ui-logo.png" alt="PayLens" />
+          </div>
         <div className="nav-gm-wrap"><GradientMenu/></div>
         <div className="nav-links">
           <a href="#features">Features</a>
@@ -1115,7 +1115,7 @@ export default function App() {
         <div className="section-inner">
             <div className="about-grid">
               <div className="about-left reveal">
-                <img className="about-avatar" src="/paylens-tab.png" alt="PayLens logo" />
+                <img className="about-avatar" src="/paylens-webpage-logo.png" alt="PayLens logo" />
                 <h2>Biswaranjan Nayak</h2>
                 <p className="about-bio">Built PayLens as a full-stack ML project — from raw dataset exploration and model training in Python, to a FastAPI backend with live FX integration, to this React frontend with a 10-factor adjustment engine. The goal: honest, context-aware salary estimates grounded in real economics — not glazed benchmarks.</p>
               <div className="about-links">
@@ -1166,7 +1166,7 @@ export default function App() {
       <footer id="footer">
         <div className="footer-inner">
           <div className="nav-logo">
-            <img className="brand-logo brand-logo-footer" src="/paylens-logo.png" alt="PayLens" />
+            <img className="brand-logo brand-logo-footer" src="/paylens-ui-logo.png" alt="PayLens" />
           </div>
           <div className="footer-stack">
             <span>FastAPI</span><span>scikit-learn</span><span>React</span>
