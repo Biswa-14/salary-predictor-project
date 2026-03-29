@@ -10,6 +10,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
   const [bounds, setBounds] = useState({ width: 0, height: 0 })
   const containerRef = useRef(null)
   const nodeRefs = useRef({})
+  const compactLayout = (bounds.width || 0) < 640
 
   useEffect(() => {
     const node = containerRef.current
@@ -82,7 +83,6 @@ export default function RadialOrbitalTimeline({ timelineData }) {
   }
 
   const getCardStyle = (pos) => {
-    const compactLayout = (bounds.width || 0) < 640
     const cardWidth = compactLayout
       ? Math.min(200, Math.max(160, (bounds.width || 220) - 48))
       : 220
@@ -115,6 +115,51 @@ export default function RadialOrbitalTimeline({ timelineData }) {
 
   const statusColor = (s) => s === 'completed' ? '#10b981' : s === 'in-progress' ? '#06b6d4' : '#64748b'
   const statusLabel = (s) => s === 'completed' ? 'DONE' : s === 'in-progress' ? 'IN PROGRESS' : 'PENDING'
+  const activeItem = activeNodeId ? timelineData.find(i => i.id === activeNodeId) ?? null : null
+
+  const renderCard = (item, style = undefined, className = 'rot-card') => (
+    <div className={className} style={style} onClick={e => e.stopPropagation()}>
+      <div className="rot-card-line" />
+      <div className="rot-card-header">
+        <span className="rot-status-badge" style={{ background: statusColor(item.status) + '33', color: statusColor(item.status), borderColor: statusColor(item.status) + '66' }}>
+          {statusLabel(item.status)}
+        </span>
+        <span className="rot-card-date">{item.date}</span>
+      </div>
+      <div className="rot-card-title">{item.title}</div>
+      <p className="rot-card-body">{item.content}</p>
+
+      <div className="rot-energy">
+        <div className="rot-energy-header">
+          <span>⚡ Energy</span>
+          <span>{item.energy}%</span>
+        </div>
+        <div className="rot-energy-track">
+          <div className="rot-energy-fill" style={{ width: `${item.energy}%`, background: `linear-gradient(90deg, #3b82f6, ${statusColor(item.status)})` }} />
+        </div>
+      </div>
+
+      {item.relatedIds.length > 0 && (
+        <div className="rot-related">
+          <div className="rot-related-title">🔗 Connected</div>
+          <div className="rot-related-btns">
+            {item.relatedIds.map(rid => {
+              const rel = timelineData.find(i => i.id === rid)
+              return (
+                <button
+                  key={rid}
+                  className="rot-related-btn"
+                  onClick={e => { e.stopPropagation(); toggleItem(rid) }}
+                >
+                  {rel?.title} →
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  )
 
   return (
     <div
@@ -185,51 +230,12 @@ export default function RadialOrbitalTimeline({ timelineData }) {
             </div>
 
             {/* Expanded card */}
-            {expanded && (
-              <div className="rot-card" style={getCardStyle(pos)} onClick={e => e.stopPropagation()}>
-                <div className="rot-card-line" />
-                <div className="rot-card-header">
-                  <span className="rot-status-badge" style={{ background: statusColor(item.status) + '33', color: statusColor(item.status), borderColor: statusColor(item.status) + '66' }}>
-                    {statusLabel(item.status)}
-                  </span>
-                  <span className="rot-card-date">{item.date}</span>
-                </div>
-                <div className="rot-card-title">{item.title}</div>
-                <p className="rot-card-body">{item.content}</p>
-
-                {/* Energy bar */}
-                <div className="rot-energy">
-                  <div className="rot-energy-header">
-                    <span>⚡ Energy</span>
-                    <span>{item.energy}%</span>
-                  </div>
-                  <div className="rot-energy-track">
-                    <div className="rot-energy-fill" style={{ width: `${item.energy}%`, background: `linear-gradient(90deg, #3b82f6, ${statusColor(item.status)})` }} />
-                  </div>
-                </div>
-
-                {/* Related nodes */}
-                {item.relatedIds.length > 0 && (
-                  <div className="rot-related">
-                    <div className="rot-related-title">🔗 Connected</div>
-                    <div className="rot-related-btns">
-                      {item.relatedIds.map(rid => {
-                        const rel = timelineData.find(i => i.id === rid)
-                        return (
-                          <button key={rid} className="rot-related-btn"
-                            onClick={e => { e.stopPropagation(); toggleItem(rid) }}>
-                            {rel?.title} →
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+            {expanded && !compactLayout && renderCard(item, getCardStyle(pos))}
           </div>
         )
       })}
+
+      {compactLayout && activeItem && renderCard(activeItem, undefined, 'rot-card rot-card-mobile')}
     </div>
   )
 }

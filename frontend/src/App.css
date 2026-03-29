@@ -134,10 +134,27 @@ body { font-family:system-ui,-apple-system,sans-serif; background:var(--dark); c
   .rot-label { top: 42px; font-size: 0.62rem; max-width: 78px; white-space: normal; text-align: center; line-height: 1.15; }
   .rot-dot { width: 34px; height: 34px; }
   .rot-card { top: 56px; max-width: calc(100vw - 64px); padding: 10px 12px 12px; }
+  .rot-card-mobile {
+    top: auto;
+    bottom: 12px;
+    left: 50%;
+    right: auto;
+    width: min(248px, calc(100% - 28px));
+    max-width: calc(100% - 28px);
+    transform: translateX(-50%);
+  }
+  .rot-card-mobile .rot-card-line {
+    display: none;
+  }
 }
 @media (max-width: 420px) {
   .orbital-wrapper { height: 390px; }
   .rot-label { max-width: 66px; font-size: 0.58rem; }
+  .rot-card-mobile {
+    width: min(224px, calc(100% - 24px));
+    max-width: calc(100% - 24px);
+    bottom: 10px;
+  }
 }
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
