@@ -583,6 +583,36 @@ select:invalid, select:has(option[value=""]:checked) { color: var(--muted2); }
   border: 1px solid rgba(248,113,113,0.2);
 }
 
+.reload-btn {
+  appearance: none;
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  background: rgba(34, 211, 238, 0.1);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.55rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.reload-btn:hover,
+.reload-btn:focus-visible {
+  background: rgba(34, 211, 238, 0.16);
+  border-color: rgba(34, 211, 238, 0.42);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.reload-btn-inline {
+  margin-top: 0.7rem;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.78rem;
+}
+
 /* ── Section transitions — smoother reveals ── */
 .reveal { 
   opacity: 0; transform: translateY(20px); 

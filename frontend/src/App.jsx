@@ -719,6 +719,10 @@ export default function App() {
     setForm(f=>({...f,[e.target.name]:v}))
   }
 
+  const handleReload = useCallback(() => {
+    if (typeof window !== "undefined") window.location.reload()
+  }, [])
+
   const handleSubmit=async()=>{
     if(!form.job_title)        {setError("Please choose a Job Title.");        return}
     if(!options.job_titles.includes(form.job_title)) {setError("Choose a job title from the suggestions so we can match it correctly."); return}
@@ -815,7 +819,13 @@ export default function App() {
     setCopied(true);setTimeout(()=>setCopied(false),2000)
   }
 
-  if(bootError) return <div className="splash"><div className="empty-icon">!</div><p>{bootError}</p></div>
+  if(bootError) return (
+    <div className="splash">
+      <div className="empty-icon">!</div>
+      <p>{bootError}</p>
+      <button className="reload-btn" onClick={handleReload}>Reload PayLens</button>
+    </div>
+  )
   if(!options) return <div className="splash"><div className="spinner lg"/><p>{isOnline ? "Getting PayLens ready..." : "Waiting for a connection..."}</p></div>
 
   return(
@@ -1044,7 +1054,16 @@ export default function App() {
             <button className="predict-btn" onClick={handleSubmit} disabled={loading}>
               {loading?<><span className="spinner sm"/>Predicting…</>:"Predict My Salary →"}
             </button>
-            {error&&<p className="error-msg">{error}</p>}
+            {error&&(
+              <div className="error-msg">
+                <p>{error}</p>
+                {(error.includes("Unable to predict") || error.includes("offline")) && (
+                  <button className="reload-btn reload-btn-inline" onClick={handleReload}>
+                    Reload
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
           {/* RESULT */}
