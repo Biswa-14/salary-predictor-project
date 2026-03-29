@@ -113,9 +113,39 @@ export default function RadialOrbitalTimeline({ timelineData }) {
     return active ? active.relatedIds.includes(id) : false
   }
 
+  const getMobileCardStyle = (pos) => {
+    const cardWidth = Math.min(210, Math.max(164, (bounds.width || 240) - 52))
+
+    if (pos.x > 45) {
+      return {
+        width: cardWidth,
+        left: 'auto',
+        right: '-16px',
+        top: 'auto',
+        bottom: '52px',
+        transform: 'none',
+      }
+    }
+
+    if (pos.x < -45) {
+      return {
+        width: cardWidth,
+        left: '-16px',
+        top: 'auto',
+        bottom: '52px',
+        transform: 'none',
+      }
+    }
+
+    return {
+      width: cardWidth,
+      top: 'auto',
+      bottom: '52px',
+    }
+  }
+
   const statusColor = (s) => s === 'completed' ? '#10b981' : s === 'in-progress' ? '#06b6d4' : '#64748b'
   const statusLabel = (s) => s === 'completed' ? 'DONE' : s === 'in-progress' ? 'IN PROGRESS' : 'PENDING'
-  const activeItem = activeNodeId ? timelineData.find(i => i.id === activeNodeId) ?? null : null
 
   const renderCard = (item, style = undefined, className = 'rot-card') => (
     <div className={className} style={style} onClick={e => e.stopPropagation()}>
@@ -230,12 +260,10 @@ export default function RadialOrbitalTimeline({ timelineData }) {
             </div>
 
             {/* Expanded card */}
-            {expanded && !compactLayout && renderCard(item, getCardStyle(pos))}
+            {expanded && renderCard(item, compactLayout ? getMobileCardStyle(pos) : getCardStyle(pos), compactLayout ? 'rot-card rot-card-mobile' : 'rot-card')}
           </div>
         )
       })}
-
-      {compactLayout && activeItem && renderCard(activeItem, undefined, 'rot-card rot-card-mobile')}
     </div>
   )
 }

@@ -135,25 +135,20 @@ body { font-family:system-ui,-apple-system,sans-serif; background:var(--dark); c
   .rot-dot { width: 34px; height: 34px; }
   .rot-card { top: 56px; max-width: calc(100vw - 64px); padding: 10px 12px 12px; }
   .rot-card-mobile {
-    top: auto;
-    bottom: 12px;
-    left: 50%;
-    right: auto;
-    width: min(248px, calc(100% - 28px));
-    max-width: calc(100% - 28px);
-    transform: translateX(-50%);
+    max-width: min(210px, calc(100vw - 72px));
   }
   .rot-card-mobile .rot-card-line {
-    display: none;
+    top: auto;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 @media (max-width: 420px) {
   .orbital-wrapper { height: 390px; }
   .rot-label { max-width: 66px; font-size: 0.58rem; }
   .rot-card-mobile {
-    width: min(224px, calc(100% - 24px));
-    max-width: calc(100% - 24px);
-    bottom: 10px;
+    max-width: min(192px, calc(100vw - 60px));
   }
 }
 
