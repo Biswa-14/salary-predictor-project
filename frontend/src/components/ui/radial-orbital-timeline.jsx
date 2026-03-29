@@ -43,29 +43,30 @@ export default function RadialOrbitalTimeline({ timelineData }) {
     return () => clearInterval(timer)
   }, [autoRotate])
 
-  const toggleItem = (id) => {
-    setExpandedItems(prev => {
-      const next = {}
-      Object.keys(prev).forEach(k => { next[parseInt(k)] = false })
-      const opening = !prev[id]
-      next[id] = opening
-      if (opening) {
-        setActiveNodeId(id)
-        setAutoRotate(false)
-        const item = timelineData.find(i => i.id === id)
-        const pulse = {}
-        if (item) item.relatedIds.forEach(r => { pulse[r] = true })
-        setPulseEffect(pulse)
-        // center it
-        const idx = timelineData.findIndex(i => i.id === id)
-        setRotationAngle(270 - (idx / timelineData.length) * 360)
-      } else {
-        setActiveNodeId(null)
-        setAutoRotate(true)
-        setPulseEffect({})
-      }
-      return next
+  const clearActiveNode = () => {
+    setExpandedItems({})
+    setActiveNodeId(null)
+    setPulseEffect({})
+    setAutoRotate(true)
+  }
+
+  const openItem = (id) => {
+    const next = {}
+    timelineData.forEach(item => {
+      next[item.id] = item.id === id
     })
+
+    setExpandedItems(next)
+    setActiveNodeId(id)
+    setAutoRotate(false)
+
+    const item = timelineData.find(i => i.id === id)
+    const pulse = {}
+    if (item) item.relatedIds.forEach(r => { pulse[r] = true })
+    setPulseEffect(pulse)
+
+    const idx = timelineData.findIndex(i => i.id === id)
+    setRotationAngle(270 - (idx / timelineData.length) * 360)
   }
 
   const calcPos = (index, total) => {
@@ -179,7 +180,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                 <button
                   key={rid}
                   className="rot-related-btn"
-                  onClick={e => { e.stopPropagation(); toggleItem(rid) }}
+                  onClick={e => { e.stopPropagation(); openItem(rid) }}
                 >
                   {rel?.title} →
                 </button>
@@ -195,12 +196,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
     <div
       ref={containerRef}
       className="rot-container"
-      onClick={e => {
-        if (e.target === containerRef.current) {
-          setExpandedItems({}); setActiveNodeId(null)
-          setPulseEffect({}); setAutoRotate(true)
-        }
-      }}
+      onClick={clearActiveNode}
     >
       {/* Center orb */}
       <div className="rot-orb">
@@ -236,7 +232,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
               zIndex: expanded ? 200 : pos.zIndex,
               opacity: expanded ? 1 : pos.opacity,
             }}
-            onClick={e => { e.stopPropagation(); toggleItem(item.id) }}
+            onClick={e => { e.stopPropagation(); openItem(item.id) }}
           >
             {/* Energy aura */}
             {pulsing && (
