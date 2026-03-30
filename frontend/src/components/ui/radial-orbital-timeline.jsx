@@ -43,6 +43,28 @@ export default function RadialOrbitalTimeline({ timelineData }) {
     return () => clearInterval(timer)
   }, [autoRotate])
 
+  useEffect(() => {
+    if (!activeNodeId) return
+
+    const handlePointerDown = (event) => {
+      const container = containerRef.current
+      if (!container) return
+
+      const target = event.target
+      if (!(target instanceof Node)) return
+
+      if (!container.contains(target)) {
+        setExpandedItems({})
+        setActiveNodeId(null)
+        setPulseEffect({})
+        setAutoRotate(true)
+      }
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [activeNodeId])
+
   const clearActiveNode = () => {
     setExpandedItems({})
     setActiveNodeId(null)
