@@ -45,6 +45,7 @@ body { font-family:system-ui,-apple-system,sans-serif; background:var(--dark); c
 .brand-lockup-footer .brand-wordmark { font-size:1.2rem; }
 .brand-lockup-about { align-items:flex-start; gap:10px; }
 .brand-lockup-about .brand-mark { width:96px; height:96px; }
+.brand-lockup-about .brand-copy { min-height:96px; justify-content:center; }
 .brand-lockup-about .brand-wordmark { font-size:2.2rem; }
 .nav-logo-badge { width:28px; height:28px; border-radius:8px; flex-shrink:0; background:linear-gradient(135deg,var(--green),var(--cyan)); display:flex; align-items:center; justify-content:center; font-size:0.82rem; font-weight:900; color:#fff; }
 .nav-links { display:none; gap:1.5rem; }
@@ -249,6 +250,10 @@ select:focus, .job-picker input:focus { border-color:var(--green); box-shadow:0 
 .currency-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:1.25rem; }
 .cur-pill { padding:0.2rem 0.6rem; border-radius:20px; border:1px solid var(--dark4); background:transparent; color:var(--muted2); font-size:0.75rem; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
 .cur-pill.active { background:var(--green); color:#fff; border-color:var(--green); }
+.cur-flag {
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 0.95em;
+}
 .salary-hero { text-align:center; margin-bottom:1.25rem; }
 .salary-amount { font-size:2.6rem; font-weight:900; color:var(--green); line-height:1; }
 .salary-period { font-size:0.78rem; color:var(--muted2); margin-top:4px; }
@@ -808,6 +813,16 @@ footer[id] {
   .job-picker-menu {
     max-height: 220px;
   }
+
+  .brand-lockup-about {
+    gap: 0;
+  }
+
+  .brand-lockup-about .brand-copy {
+    min-height: 96px;
+    margin-left: -10px;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 420px) {
@@ -828,6 +843,10 @@ footer[id] {
   .brand-lockup-nav .brand-motto {
     max-width: 148px;
     font-size: 0.46rem;
+  }
+
+  .brand-lockup-about .brand-copy {
+    margin-left: -14px;
   }
 
   .hero {

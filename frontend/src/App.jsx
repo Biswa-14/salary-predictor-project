@@ -1129,7 +1129,7 @@ export default function App() {
                 <div className="currency-row">
                   {Object.entries(CURRENCIES).map(([k,c])=>(
                     <button key={k} className={`cur-pill ${currency===k?"active":""}`}
-                      onClick={()=>setCurrency(k)} title={c.label}>{c.flag} {k}</button>
+                      onClick={()=>setCurrency(k)} title={c.label}><span className="cur-flag">{c.flag}</span> {k}</button>
                   ))}
                 </div>
 
