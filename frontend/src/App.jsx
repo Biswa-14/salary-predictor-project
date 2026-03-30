@@ -250,7 +250,10 @@ function BrandLockup({ variant = "nav", className = "" }) {
   return (
     <div className={`brand-lockup brand-lockup-${variant} ${className}`.trim()}>
       <img className="brand-mark" src="/paylens-webpage-logo.png" alt="PayLens logo" />
-      <span className="brand-wordmark">PayLens</span>
+      <div className="brand-copy">
+        <span className="brand-wordmark">PayLens</span>
+        {variant === "nav" && <span className="brand-motto">Know What You Should Be Earning.</span>}
+      </div>
     </div>
   )
 }
@@ -607,7 +610,7 @@ export default function App() {
   const [isOnline,    setIsOnline]    = useState(
     typeof navigator === "undefined" ? true : navigator.onLine
   )
-  const [preferNativeSelect, setPreferNativeSelect] = useState(false)
+  const [jobMenuOpen, setJobMenuOpen] = useState(false)
   const resultRef = useRef(null)
   useScrollReveal()
 
@@ -638,10 +641,6 @@ export default function App() {
 
   useEffect(()=>{
     if(typeof window === "undefined") return
-    const mediaQuery = window.matchMedia("(max-width: 768px), (hover: none) and (pointer: coarse)")
-    const applyPreference = event => setPreferNativeSelect(event.matches)
-    applyPreference(mediaQuery)
-
     const handleOnline = () => {
       setIsOnline(true)
       setBootError(null)
@@ -653,14 +652,10 @@ export default function App() {
 
     window.addEventListener("online", handleOnline)
     window.addEventListener("offline", handleOffline)
-    if (typeof mediaQuery.addEventListener === "function") mediaQuery.addEventListener("change", applyPreference)
-    else mediaQuery.addListener(applyPreference)
 
     return () => {
       window.removeEventListener("online", handleOnline)
       window.removeEventListener("offline", handleOffline)
-      if (typeof mediaQuery.removeEventListener === "function") mediaQuery.removeEventListener("change", applyPreference)
-      else mediaQuery.removeListener(applyPreference)
     }
   }, [])
 
@@ -717,6 +712,16 @@ export default function App() {
   const handleChange=e=>{
     const v=["remote_ratio","work_year"].includes(e.target.name)?Number(e.target.value):e.target.value
     setForm(f=>({...f,[e.target.name]:v}))
+  }
+
+  const handleJobInputChange = (e) => {
+    setForm(f => ({ ...f, job_title: e.target.value }))
+    setJobMenuOpen(true)
+  }
+
+  const selectJobTitle = (title) => {
+    setForm(f => ({ ...f, job_title: title }))
+    setJobMenuOpen(false)
   }
 
   const handleReload = useCallback(() => {
@@ -811,6 +816,12 @@ export default function App() {
     {factor:"Demand",       value:roleInfo.demand},
   ]:[]
   const salaryStory = result ? getSalaryStory(form, roleInfo, countryCtx, adjusted, applyCol) : []
+  const normalizedJobQuery = form.job_title.trim().toLowerCase()
+  const filteredJobTitles = options
+    ? options.job_titles
+        .filter(title => normalizedJobQuery === "" || title.toLowerCase().includes(normalizedJobQuery))
+        .slice(0, 10)
+    : []
 
   const handleCopy=()=>{
     const shareUrl = buildShareUrl(form, {currency, period, applyCol})
@@ -937,6 +948,18 @@ export default function App() {
         </div>
       </section>
 
+      <section className="scope-section reveal">
+        <div className="glass scope-card">
+          <p className="scope-eyebrow">Coverage note</p>
+          <h2 className="scope-title">Built around technical and data salary signals.</h2>
+          <p className="scope-copy">
+            PayLens is trained and tuned around technical careers such as data science, machine learning, analytics engineering,
+            BI, software, and nearby specialist roles. If a role sits far outside that world, the estimate may be less reliable than
+            it is for core tech and data positions.
+          </p>
+        </div>
+      </section>
+
       {/* ── PREDICTOR ── */}
       <section className="predictor" id="predictor">
         <h2 className="section-title reveal">Salary Predictor</h2>
@@ -954,30 +977,39 @@ export default function App() {
             <div className="field-grid">
               <label className="field span2">
                 <span>Job Title</span>
-                {preferNativeSelect ? (
-                  <select name="job_title" value={form.job_title} onChange={handleChange}>
-                    <option value="" disabled>Select a job title…</option>
-                    {options.job_titles.map(t=><option key={t} value={t}>{t}</option>)}
-                  </select>
-                ) : (
-                  <>
-                    <input
-                      type="text"
-                      name="job_title"
-                      list="job-title-options"
-                      value={form.job_title}
-                      onChange={handleChange}
-                      placeholder="Search and select a job title…"
-                    />
-                    <datalist id="job-title-options">
-                      {options.job_titles.map(t=><option key={t} value={t} />)}
-                    </datalist>
-                  </>
-                )}
+                <div className="job-picker">
+                  <input
+                    type="text"
+                    name="job_title"
+                    value={form.job_title}
+                    onChange={handleJobInputChange}
+                    onFocus={() => setJobMenuOpen(true)}
+                    onBlur={() => window.setTimeout(() => setJobMenuOpen(false), 120)}
+                    placeholder="Search and select a job title…"
+                    autoComplete="off"
+                  />
+                  {jobMenuOpen && (
+                    <div className="job-picker-menu">
+                      {filteredJobTitles.length ? (
+                        filteredJobTitles.map(title => (
+                          <button
+                            key={title}
+                            type="button"
+                            className={`job-picker-option ${form.job_title === title ? "job-picker-option-active" : ""}`}
+                            onMouseDown={e => e.preventDefault()}
+                            onClick={() => selectJobTitle(title)}
+                          >
+                            {title}
+                          </button>
+                        ))
+                      ) : (
+                        <div className="job-picker-empty">No matching technical roles found.</div>
+                      )}
+                    </div>
+                  )}
+                </div>
                 <small className="field-help">
-                  {preferNativeSelect
-                    ? "Use the list to choose the closest job title for your role."
-                    : "Start typing to filter roles like Data Scientist, MLE, or NLP Engineer."}
+                  Start typing to filter roles like Data Scientist, MLE, or NLP Engineer.
                 </small>
               </label>
 
