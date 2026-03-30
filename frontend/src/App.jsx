@@ -820,7 +820,6 @@ export default function App() {
   const filteredJobTitles = options
     ? options.job_titles
         .filter(title => normalizedJobQuery === "" || title.toLowerCase().includes(normalizedJobQuery))
-        .slice(0, 10)
     : []
 
   const handleCopy=()=>{

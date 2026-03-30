@@ -784,18 +784,25 @@ footer[id] {
 
   .brand-lockup-nav .brand-copy {
     align-items: center;
+    gap: 2px;
   }
 
   .brand-lockup-nav .brand-wordmark {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
   }
 
   .brand-lockup-nav .brand-motto {
-    display: none;
+    display: block;
+    white-space: normal;
+    text-align: center;
+    max-width: 170px;
+    font-size: 0.5rem;
+    line-height: 1.25;
+    letter-spacing: 0.08em;
   }
 
   .hero {
-    padding-top: 8.4rem;
+    padding-top: 9.1rem;
   }
 
   .job-picker-menu {
@@ -809,7 +816,21 @@ footer[id] {
     padding: 0.42rem 0.64rem;
   }
 
+  .brand-lockup-nav .brand-mark {
+    width: 30px;
+    height: 30px;
+  }
+
+  .brand-lockup-nav .brand-wordmark {
+    font-size: 0.82rem;
+  }
+
+  .brand-lockup-nav .brand-motto {
+    max-width: 148px;
+    font-size: 0.46rem;
+  }
+
   .hero {
-    padding-top: 8.9rem;
+    padding-top: 9.5rem;
   }
 }
