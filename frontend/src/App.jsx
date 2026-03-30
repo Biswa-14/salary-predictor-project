@@ -28,18 +28,18 @@ const MOBILE_NAV_ITEMS = [
 ]
 
 const CURRENCIES = {
-  USD: { symbol:"$",   label:"US Dollar",         flag:"🇺🇸" },
-  INR: { symbol:"₹",   label:"Indian Rupee",       flag:"🇮🇳" },
-  EUR: { symbol:"€",   label:"Euro",               flag:"🇪🇺" },
-  GBP: { symbol:"£",   label:"British Pound",      flag:"🇬🇧" },
-  AUD: { symbol:"A$",  label:"Australian Dollar",  flag:"🇦🇺" },
-  JPY: { symbol:"¥",   label:"Japanese Yen",       flag:"🇯🇵" },
-  CAD: { symbol:"C$",  label:"Canadian Dollar",    flag:"🇨🇦" },
-  SGD: { symbol:"S$",  label:"Singapore Dollar",   flag:"🇸🇬" },
-  BRL: { symbol:"R$",  label:"Brazilian Real",     flag:"🇧🇷" },
-  MXN: { symbol:"MX$", label:"Mexican Peso",       flag:"🇲🇽" },
-  PLN: { symbol:"zł",  label:"Polish Zloty",       flag:"🇵🇱" },
-  AED: { symbol:"د.إ", label:"UAE Dirham",         flag:"🇦🇪" },
+  USD: { symbol:"$",   label:"US Dollar",         flagCode:"us" },
+  INR: { symbol:"₹",   label:"Indian Rupee",      flagCode:"in" },
+  EUR: { symbol:"€",   label:"Euro",              flagCode:"eu" },
+  GBP: { symbol:"£",   label:"British Pound",     flagCode:"gb" },
+  AUD: { symbol:"A$",  label:"Australian Dollar", flagCode:"au" },
+  JPY: { symbol:"¥",   label:"Japanese Yen",      flagCode:"jp" },
+  CAD: { symbol:"C$",  label:"Canadian Dollar",   flagCode:"ca" },
+  SGD: { symbol:"S$",  label:"Singapore Dollar",  flagCode:"sg" },
+  BRL: { symbol:"R$",  label:"Brazilian Real",    flagCode:"br" },
+  MXN: { symbol:"MX$", label:"Mexican Peso",      flagCode:"mx" },
+  PLN: { symbol:"zł",  label:"Polish Zloty",      flagCode:"pl" },
+  AED: { symbol:"د.إ", label:"UAE Dirham",        flagCode:"ae" },
 }
 
 const COUNTRY_FACTORS = {
@@ -1129,7 +1129,16 @@ export default function App() {
                 <div className="currency-row">
                   {Object.entries(CURRENCIES).map(([k,c])=>(
                     <button key={k} className={`cur-pill ${currency===k?"active":""}`}
-                      onClick={()=>setCurrency(k)} title={c.label}><span className="cur-flag">{c.flag}</span> {k}</button>
+                      onClick={()=>setCurrency(k)} title={c.label}>
+                      <img
+                        className="cur-flag-img"
+                        src={`https://flagcdn.com/24x18/${c.flagCode}.png`}
+                        srcSet={`https://flagcdn.com/48x36/${c.flagCode}.png 2x`}
+                        alt=""
+                        loading="lazy"
+                      />
+                      {k}
+                    </button>
                   ))}
                 </div>
 
