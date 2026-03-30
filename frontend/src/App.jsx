@@ -623,8 +623,7 @@ export default function App() {
     window.scrollTo({ top, behavior: "smooth" })
   }, [])
 
-  // ── Fetch options and FX — no auto-fill ──────────────────────────────────
-  useEffect(()=>{
+  const loadBootData = useCallback(() => {
     axios.get(`${API}/options`).then(res=>{
       setOptions(res.data)
       setBootError(null)
@@ -637,7 +636,12 @@ export default function App() {
     })
     axios.get("https://api.exchangerate-api.com/v4/latest/USD")
       .then(r=>setFxRates(r.data.rates)).catch(()=>{})
-  },[])
+  }, [])
+
+  // ── Fetch options and FX — no auto-fill ──────────────────────────────────
+  useEffect(()=>{
+    loadBootData()
+  },[loadBootData])
 
   useEffect(()=>{
     if(typeof window === "undefined") return
@@ -725,8 +729,14 @@ export default function App() {
   }
 
   const handleReload = useCallback(() => {
+    setError(null)
+    setBootError(null)
+    if (!options) {
+      loadBootData()
+      return
+    }
     if (typeof window !== "undefined") window.location.reload()
-  }, [])
+  }, [loadBootData, options])
 
   const handleSubmit=async()=>{
     if(!form.job_title)        {setError("Please choose a Job Title.");        return}
@@ -833,7 +843,7 @@ export default function App() {
     <div className="splash">
       <div className="empty-icon">!</div>
       <p>{bootError}</p>
-      <button className="reload-btn" onClick={handleReload}>Reload PayLens</button>
+      <button type="button" className="reload-btn" onClick={handleReload}>Reload PayLens</button>
     </div>
   )
   if(!options) return <div className="splash"><div className="spinner lg"/><p>{isOnline ? "Getting PayLens ready..." : "Waiting for a connection..."}</p></div>
@@ -1089,7 +1099,7 @@ export default function App() {
               <div className="error-msg">
                 <p>{error}</p>
                 {(error.includes("Unable to predict") || error.includes("offline")) && (
-                  <button className="reload-btn reload-btn-inline" onClick={handleReload}>
+                  <button type="button" className="reload-btn reload-btn-inline" onClick={handleReload}>
                     Reload
                   </button>
                 )}
