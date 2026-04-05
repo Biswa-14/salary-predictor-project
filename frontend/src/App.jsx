@@ -302,6 +302,15 @@ function getSalaryStory(form, roleInfo, countryCtx, adjusted, applyCol) {
   ].filter(Boolean)
 }
 
+function getConfidenceScore(form, roleInfo, countryCode) {
+  const hasExactCountryProfile = Boolean(COUNTRY_FACTORS[countryCode])
+  const experienceBonus = form.experience_level === "SE" || form.experience_level === "MI" ? 3 : 0
+  const remotePenalty = form.remote_ratio === 50 ? 2 : 0
+  const profilePenalty = hasExactCountryProfile ? 0 : 4
+  const rawScore = 72 + Math.round(roleInfo.demand * 0.12) - Math.round(roleInfo.competition * 0.04) + experienceBonus - remotePenalty - profilePenalty
+  return Math.max(74, Math.min(92, rawScore))
+}
+
 function computeSalary(rawUSD, form) {
   const country    = getCountryProfile(form.company_location)
   const roleInfo   = getRoleData(form.job_title)
@@ -826,6 +835,8 @@ export default function App() {
     {factor:"Demand",       value:roleInfo.demand},
   ]:[]
   const salaryStory = result ? getSalaryStory(form, roleInfo, countryCtx, adjusted, applyCol) : []
+  const confidenceScore = result ? getConfidenceScore(form, roleInfo, form.company_location) : null
+  const confidenceRangeText = adjusted ? `±${Math.round((((high - low) / 2) / Math.max(predicted, 1)) * 100)}% typical range` : ""
   const normalizedJobQuery = form.job_title.trim().toLowerCase()
   const filteredJobTitles = options
     ? options.job_titles
@@ -966,6 +977,35 @@ export default function App() {
             BI, software, and nearby specialist roles. If a role sits far outside that world, the estimate may be less reliable than
             it is for core tech and data positions.
           </p>
+        </div>
+      </section>
+
+      <section className="how-section reveal" id="how-it-works">
+        <div className="section-inner">
+          <h2 className="section-title">How PayLens works</h2>
+          <p className="section-sub">A portfolio-grade ML workflow, not just a static salary calculator.</p>
+          <div className="how-grid">
+            <div className="glass how-card">
+              <span className="how-step">01</span>
+              <h3>Real salary dataset</h3>
+              <p>PayLens starts from a real data science and technical salary dataset covering role, seniority, location, remote ratio, company size, and employment type.</p>
+            </div>
+            <div className="glass how-card">
+              <span className="how-step">02</span>
+              <h3>Random Forest model</h3>
+              <p>The backend serves a trained Random Forest regression model that estimates salary from encoded feature inputs rather than using fixed rules.</p>
+            </div>
+            <div className="glass how-card">
+              <span className="how-step">03</span>
+              <h3>Context adjustments</h3>
+              <p>The raw prediction is translated into something more useful with tax, cost-of-living, demand, competition, inflation, and regional market context.</p>
+            </div>
+            <div className="glass how-card">
+              <span className="how-step">04</span>
+              <h3>Live UX layer</h3>
+              <p>Results are presented with live FX conversion, confidence guidance, scenario toggles, and mobile-friendly interaction so the output feels actionable.</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1117,8 +1157,17 @@ export default function App() {
               </div>
             )}
             {loading&&(
-              <div className="empty-state glass">
-                <div className="spinner lg"/><p>Running 10-factor model…</p>
+              <div className="empty-state glass loading-state">
+                <div className="loading-orb">
+                  <div className="spinner lg"/>
+                </div>
+                <p>Running the PayLens model…</p>
+                <small>Encoding your profile, scoring the role, and applying regional adjustments.</small>
+                <div className="loading-steps" aria-hidden="true">
+                  <span className="loading-step-chip">ML inference</span>
+                  <span className="loading-step-chip">Market context</span>
+                  <span className="loading-step-chip">FX + COL</span>
+                </div>
               </div>
             )}
             {result&&adjusted&&(
@@ -1130,8 +1179,9 @@ export default function App() {
                     {applyCol?`COL-adjusted for ${countryCtx.label}`:"Nominal US-equivalent salary"}
                   </span>
                   <button className={`col-toggle-btn ${applyCol?"col-on":"col-off"}`}
+                    title={applyCol ? "Cost of living adjustment is active." : "Showing the nominal salary without cost-of-living adjustment."}
                     onClick={()=>setApplyCol(a=>!a)}>
-                    {applyCol?"COL ON":"COL OFF"}
+                    {applyCol?"COL Adjusted":"COL Off"}
                   </button>
                 </div>
 
@@ -1164,8 +1214,15 @@ export default function App() {
                 <div className="salary-hero">
                   <div className="salary-amount"><AnimatedNumber value={predicted} prefix={sym}/></div>
                   <div className="salary-period">gross · per {period}</div>
+                  <div className="confidence-row">
+                    <span className="confidence-pill">Confidence: {confidenceScore}%</span>
+                    <span className="confidence-note">{confidenceRangeText}</span>
+                  </div>
                   <div className="take-home-row">
-                    <span className="take-home-label">Take-home (est.):</span>
+                    <span className="take-home-label" title="Estimated after-tax pay based on country-level tax assumptions and the current scenario.">
+                      Take-home estimate
+                    </span>
+                    <span className="take-home-tip" title="This is an estimated post-tax figure, not a payroll quote.">i</span>
                     <span className="take-home-val">{sym}{net.toLocaleString()}</span>
                   </div>
                 </div>
