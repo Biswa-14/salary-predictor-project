@@ -5,6 +5,7 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, LineChart, Line
 } from "recharts"
 import { Analytics } from "@vercel/analytics/react"
+import BackgroundPaperShaders from "./components/ui/background-paper-shaders"
 import "./App.css"
 
 const API = import.meta.env.VITE_API_URL ?? "http://localhost:8000"
@@ -782,6 +783,7 @@ export default function App() {
   return(
     <div className="app" id="home">
       <ScrollProgress/>
+      <BackgroundPaperShaders />
       {/* ── NAV ── */}
       <nav className={`nav ${navScrolled?"nav-scrolled":""}`}>
           <button className="nav-logo nav-logo-btn" onClick={()=>scrollToSection("about")} aria-label="Go to about section">
