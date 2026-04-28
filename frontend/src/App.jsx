@@ -5,8 +5,6 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, LineChart, Line
 } from "recharts"
 import { Analytics } from "@vercel/analytics/react"
-import GradientMenu from "./components/ui/gradient-menu"
-import RadialOrbitalTimeline from "./components/ui/radial-orbital-timeline"
 import "./App.css"
 
 const API = import.meta.env.VITE_API_URL ?? "http://localhost:8000"
@@ -22,7 +20,8 @@ const DEFAULT_FORM = {
 
 const MOBILE_NAV_ITEMS = [
   { id: "home", label: "Home" },
-  { id: "features", label: "Features" },
+  { id: "features", label: "What it shows" },
+  { id: "how-it-works", label: "How it works" },
   { id: "predictor", label: "Predict" },
   { id: "about", label: "About" },
 ]
@@ -394,105 +393,12 @@ const buildTrendData = t => {
   return YEARS.map((y,i) => ({ year:y, salary:vals[i] }))
 }
 
-const SALARY_FACTORS = [
-  { title:"Cost of Living",   icon:"🏙️", color:"#10b981", body:"Cities like SF and Zurich pay more because rent, food and services cost more. Employers adjust salaries to keep purchasing power competitive." },
-  { title:"Supply & Demand",  icon:"📊", color:"#06b6d4", body:"If ML Engineers are rare but every company needs one, salaries spike. When thousands of graduates flood a market, wages compress." },
-  { title:"Tax Burden",       icon:"🧾", color:"#f59e0b", body:"A $200k gross in Germany takes home ~62% after tax. The UAE takes 0%. Your real compensation is what stays in your pocket." },
-  { title:"GDP per Capita",   icon:"🌍", color:"#8b5cf6", body:"Countries with higher economic output pay more for the same work. A senior engineer in the US earns 4–8× more than in India — same skills, different economy." },
-  { title:"Competition",      icon:"⚔️", color:"#e24b4a", body:"200 people applying for one role means lower salary power. Niche skills like AI safety or CUDA optimization face near-zero competition." },
-  { title:"Company Size",     icon:"🏢", color:"#10b981", body:"FAANG-scale companies pay 15–25% more than mid-market for equivalent roles. Startups often compensate with equity instead of cash." },
-  { title:"Remote Ratio",     icon:"🏠", color:"#06b6d4", body:"Fully remote roles typically pay 7–10% less than on-site, as companies apply geo-adjusted compensation. Hybrid roles sit in between." },
-  { title:"Experience Level", icon:"🎓", color:"#f59e0b", body:"Senior engineers earn ~1.7× entry-level salaries. Executive roles add another 30%. The jump from entry to mid is steeper than mid to senior." },
-  { title:"Role Demand",      icon:"🔥", color:"#e24b4a", body:"AI Scientist and ML Engineer roles are growing 18–22% YoY. BI Developer and Data Manager roles are contracting. Demand directly moves salaries." },
-  { title:"Inflation & Year", icon:"📈", color:"#8b5cf6", body:"Tech salaries have grown ~5% annually since 2023. A 2026 estimate is 15.8% above a 2023 benchmark for the same role — compounding matters." },
-]
-
-const IconFX   = p => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-const IconML   = p => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-const IconCOL  = p => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-const IconInfl = p => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-const IconViz  = p => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><polygon points="12 2 19 21 12 17 5 21 12 2"/></svg>
-
-const TIMELINE_DATA = [
-  { id:1, title:"FX Rates",   date:"Live",    content:"Real-time USD conversions — 12 currencies with purchasing power context per region.",                  category:"Finance", icon:IconFX,   relatedIds:[2,3], status:"completed",   energy:100 },
-  { id:2, title:"RF Model",   date:"v2",      content:"Random Forest on 2,500+ DS salary records. Multi-factor adjusted — experience, taxes, competition.",   category:"ML",      icon:IconML,   relatedIds:[1,5], status:"completed",   energy:92  },
-  { id:3, title:"COL+Tax",    date:"PPP",     content:"Country COL, GDP per capita, effective tax rate and talent competition all factor into the result.",    category:"Finance", icon:IconCOL,  relatedIds:[1,4], status:"completed",   energy:80  },
-  { id:4, title:"Inflation",  date:"2020–26", content:"Year-specific multipliers across the full 2020–2026 range including post-2023 tech salary projections.", category:"Finance", icon:IconInfl, relatedIds:[3,5], status:"completed",   energy:75  },
-  { id:5, title:"Hype Meter", date:"Trends",  content:"Role demand scored against job posting growth, LinkedIn trends and BLS projections.",                   category:"UX",      icon:IconViz,  relatedIds:[2,4], status:"in-progress", energy:65  },
-]
-
-function MeshBackground() {
-  const ref = useRef(null)
-  useEffect(() => {
-    const c = ref.current; if (!c) return
-    const ctx = c.getContext("2d"); let W,H,id,t=0; const R=20,C=11
-    const resize = () => { W=c.width=c.offsetWidth; H=c.height=c.offsetHeight }
-    resize(); window.addEventListener("resize",resize)
-    const pt = (col,row) => ({ x:(col/R+0.022*Math.sin(row*0.8+t*0.6+col*0.4))*W, y:(row/C+0.015*Math.cos(col*0.9+t*0.45+row*0.3))*H })
-    const draw = () => {
-      ctx.clearRect(0,0,W,H); t+=0.013
-      for(let r=0;r<=C;r++) for(let cc=0;cc<=R;cc++){
-        const p=pt(cc,r), a=0.032+0.022*Math.sin(t*1.2+cc*0.35+r*0.5)
-        if(cc<R){const p2=pt(cc+1,r);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p2.x,p2.y);ctx.strokeStyle=`rgba(16,185,129,${a})`;ctx.lineWidth=0.9;ctx.stroke()}
-        if(r<C){const p2=pt(cc,r+1);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p2.x,p2.y);ctx.strokeStyle=`rgba(6,182,212,${a*0.65})`;ctx.lineWidth=0.9;ctx.stroke()}
-        const da=0.07+0.05*Math.sin(t*1.8+cc+r)
-        if(da>0.09){ctx.beginPath();ctx.arc(p.x,p.y,1.3,0,Math.PI*2);ctx.fillStyle=`rgba(16,185,129,${da})`;ctx.fill()}
-      }
-      id=requestAnimationFrame(draw)
-    }
-    draw()
-    return () => { cancelAnimationFrame(id); window.removeEventListener("resize",resize) }
-  },[])
-  return <canvas ref={ref} className="mesh-canvas"/>
-}
-
-function ParticleCanvas() {
-  const ref = useRef(null)
-  useEffect(() => {
-    const c=ref.current, ctx=c.getContext("2d")
-    let W=c.width=c.offsetWidth, H=c.height=c.offsetHeight
-    const syms=["$","₹","€","£","¥","%","R$","S$"]
-    const ps=Array.from({length:28},()=>({
-      x:Math.random()*W, y:Math.random()*H,
-      vx:(Math.random()-0.5)*0.4, vy:-0.3-Math.random()*0.4,
-      size:10+Math.random()*14, alpha:0.06+Math.random()*0.12,
-      sym:syms[Math.floor(Math.random()*syms.length)]
-    }))
-    let raf
-    const draw=()=>{
-      ctx.clearRect(0,0,W,H)
-      ps.forEach(p=>{
-        ctx.globalAlpha=p.alpha; ctx.fillStyle="#10b981"
-        ctx.font=`bold ${p.size}px system-ui`; ctx.fillText(p.sym,p.x,p.y)
-        p.x+=p.vx; p.y+=p.vy
-        if(p.y<-20){p.y=H+10;p.x=Math.random()*W}
-        if(p.x<-20)p.x=W+10; if(p.x>W+20)p.x=-10
-      })
-      ctx.globalAlpha=1; raf=requestAnimationFrame(draw)
-    }
-    draw()
-    const resize=()=>{W=c.width=c.offsetWidth;H=c.height=c.offsetHeight}
-    window.addEventListener("resize",resize)
-    return ()=>{cancelAnimationFrame(raf);window.removeEventListener("resize",resize)}
-  },[])
-  return <canvas ref={ref} className="particle-canvas"/>
-}
-
 function ScrollProgress() {
-  const [pct,setPct]=useState(0)
-  useEffect(()=>{
-    const fn=()=>{const el=document.documentElement;const t=el.scrollHeight-el.clientHeight;setPct(t>0?(el.scrollTop/t)*100:0)}
-    window.addEventListener("scroll",fn);return()=>window.removeEventListener("scroll",fn)
-  },[])
-  return <div className="scroll-progress" style={{width:`${pct}%`}}/>
+  return null
 }
 
 function useScrollReveal(){
-  useEffect(()=>{
-    const els=document.querySelectorAll(".reveal")
-    const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add("revealed")})},{threshold:0.10})
-    els.forEach(el=>obs.observe(el));return()=>obs.disconnect()
-  })
+  return null
 }
 
 function useCountUp(target,dur=1200){
@@ -508,8 +414,8 @@ function AnimatedNumber({value,prefix=""}){const d=useCountUp(value);return <>{p
 
 function HypeMeter({roleData}){
   const score=roleData.hype
-  const color=score>=85?"#10b981":score>=65?"#f59e0b":"#e24b4a"
-  const label=score>=85?"Very Hot":score>=70?"In Demand":score>=50?"Stable":"Cooling"
+  const color="#2a8a5d"
+  const label=score>=85?"Strong demand":score>=70?"Healthy demand":score>=50?"Steady demand":"Lower demand"
   const circ=2*Math.PI*36, dash=(score/100)*circ
   return(
     <div className="hype-meter">
@@ -525,8 +431,8 @@ function HypeMeter({roleData}){
       <div className="hype-info">
         <div className="hype-label" style={{color}}>{label}</div>
         <div className="hype-sub">{roleData.jobPostings.toLocaleString()} active postings</div>
-        <div className="hype-yoy" style={{color:roleData.yoy>=0?"#10b981":"#e24b4a"}}>
-          {roleData.yoy>=0?"+":""}{roleData.yoy}% YoY growth
+        <div className="hype-yoy" style={{color:"#b2bcc6"}}>
+          {roleData.yoy>=0?"+":""}{roleData.yoy}% year over year
         </div>
       </div>
     </div>
@@ -842,6 +748,20 @@ export default function App() {
     ? options.job_titles
         .filter(title => normalizedJobQuery === "" || title.toLowerCase().includes(normalizedJobQuery))
     : []
+  const supportedRoleCount = options?.job_titles?.length ?? 0
+  const supportedCountryCount = options?.locations?.length ?? 0
+  const sampleScenario = {
+    experience_level: "SE",
+    employment_type: "FT",
+    job_title: "Machine Learning Engineer",
+    remote_ratio: 50,
+    company_location: "CA",
+    company_size: "M",
+    work_year: 2026,
+  }
+  const sampleProof = computeSalary(getRoleData(sampleScenario.job_title).base, sampleScenario)
+  const sampleRangeLow = Math.round(sampleProof.gross * 0.82)
+  const sampleRangeHigh = Math.round(sampleProof.gross * 1.18)
 
   const handleCopy=()=>{
     const shareUrl = buildShareUrl(form, {currency, period, applyCol})
@@ -862,13 +782,11 @@ export default function App() {
   return(
     <div className="app" id="home">
       <ScrollProgress/>
-
       {/* ── NAV ── */}
       <nav className={`nav ${navScrolled?"nav-scrolled":""}`}>
           <button className="nav-logo nav-logo-btn" onClick={()=>scrollToSection("about")} aria-label="Go to about section">
             <BrandLockup variant="nav" />
           </button>
-        <div className="nav-gm-wrap"><GradientMenu/></div>
         <div className="nav-links">
           {MOBILE_NAV_ITEMS.map(item=>(
             <button key={item.id} className="nav-link-btn" onClick={()=>scrollToSection(item.id)}>
@@ -880,63 +798,64 @@ export default function App() {
 
       {/* ── HERO ── */}
       <section className="hero">
-        <MeshBackground/><ParticleCanvas/>
-          <div className="hero-content">
+        <div className="hero-content">
           <div className="badge-row">
-            <span className="badge">Random Forest ML</span>
-            <span className="badge">Live FX Rates</span>
-            <span className="badge">10-Factor Adjusted</span>
+            <span className="badge">Built for tech roles</span>
+            <span className="badge">Country context included</span>
+            <span className="badge">Live currency conversion</span>
           </div>
-          <h1>Know Your<br/><span className="gradient-text">Market Worth</span></h1>
-          <p>Predict tech salaries across 23 countries — adjusted for taxes, competition, cost of living, demand, inflation and more.</p>
+          <h1>Check what a tech job should pay.</h1>
+          <p>Pick a role, country, experience level, and work setup. PayLens gives you a salary estimate, a take-home estimate, and the context behind the number.</p>
           <div className="hero-actions">
-            <button className="btn-primary" onClick={()=>scrollToSection("predictor")}>Predict My Salary</button>
-            <button className="btn-ghost"   onClick={()=>scrollToSection("features")}>Explore Features ↓</button>
+            <button className="btn-primary" onClick={()=>scrollToSection("predictor")}>Try the predictor</button>
+            <button className="btn-ghost"   onClick={()=>scrollToSection("features")}>See a real example</button>
           </div>
         </div>
         <div className="hero-stats">
-          {[["2,500+","Salary records"],["50+","Job titles"],["23","Countries"],["10","Adjustment factors"]].map(
+          {[["2,500+","Salary rows"],[`${supportedRoleCount}+`,"Job titles"],[String(supportedCountryCount),"Countries"],["10","Adjustments"]].map(
             ([n,l])=><div key={l} className="hstat"><strong>{n}</strong><small>{l}</small></div>)}
         </div>
       </section>
 
       {/* ── FEATURES ── */}
       <section className="features" id="features">
-        <h2 className="section-title reveal">What makes this different</h2>
-        <p className="section-sub reveal">Click any node to explore. Related nodes pulse when active.</p>
-        <div className="orbital-wrapper reveal"><RadialOrbitalTimeline timelineData={TIMELINE_DATA}/></div>
-        <div className="bento reveal">
-          {[
-            {title:"10-factor salary adjustment",body:"Experience, company size, taxes, COL, GDP, talent competition, role demand, remote ratio, employment type and inflation.",wide:true},
-            {title:"Regional context & happiness",body:"Country-specific insight: visa difficulty, work culture, tech scene, hiring chances and a happiness meter."},
-            {title:"Hype meter",                  body:"Role demand scored against job posting volume, LinkedIn trends and BLS projections."},
-            {title:"12 currencies + PPP",          body:"Switch between USD, INR, EUR, GBP, AUD, JPY, CAD, SGD, BRL, MXN, PLN, AED with live rates."},
-            {title:"COL toggle",                   body:"Switch between nominal salary and purchasing-power adjusted salary with one button.",wide:true},
-          ].map((f,i)=>(
-            <div key={i} className={`bento-card ${f.wide?"wide":""}`}>
-              <h3>{f.title}</h3><p>{f.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── SALARY FACTORS ── */}
-      <section className="factors-section" id="factors">
         <div className="section-inner">
-          <h2 className="section-title reveal">What affects your paycheck</h2>
-          <p className="section-sub reveal">10 real-world forces that determine what you actually earn — and why the same role pays 5× differently across countries.</p>
-          <div className="factors-grid">
-            {SALARY_FACTORS.map((f,i)=>(
-              <div key={i} className="factor-card glass reveal">
-                <div className="factor-icon" style={{background:f.color+"18",borderColor:f.color+"33"}}>
-                  <span style={{fontSize:"1.3rem"}}>{f.icon}</span>
+          <h2 className="section-title reveal">What you get from one estimate</h2>
+          <p className="section-sub reveal">This is a real example of the kind of output PayLens is built to show.</p>
+          <div className="proof-grid reveal">
+            <div className="glass proof-card">
+              <p className="proof-eyebrow">Example scenario</p>
+              <h3>Senior Machine Learning Engineer in Canada, hybrid, medium company</h3>
+              <div className="proof-values">
+                <div>
+                  <span className="proof-label">Gross estimate</span>
+                  <strong>${sampleProof.gross.toLocaleString()}</strong>
                 </div>
-                <div className="factor-body">
-                  <h3 style={{color:f.color}}>{f.title}</h3>
-                  <p>{f.body}</p>
+                <div>
+                  <span className="proof-label">Take-home estimate</span>
+                  <strong>${sampleProof.net.toLocaleString()}</strong>
+                </div>
+                <div>
+                  <span className="proof-label">Typical range</span>
+                  <strong>${sampleRangeLow.toLocaleString()} - ${sampleRangeHigh.toLocaleString()}</strong>
                 </div>
               </div>
-            ))}
+              <p className="proof-note">PayLens does not stop at one number. It also gives you take-home pay, a range, cost-of-living context, and local market notes.</p>
+            </div>
+            <div className="proof-metrics">
+              <div className="glass metric-card">
+                <strong>2,500+</strong>
+                <span>salary rows used to train the model</span>
+              </div>
+              <div className="glass metric-card">
+                <strong>{supportedRoleCount} roles</strong>
+                <span>available in the current job picker</span>
+              </div>
+              <div className="glass metric-card">
+                <strong>{supportedCountryCount} countries</strong>
+                <span>with country-specific context and adjustments</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -944,8 +863,8 @@ export default function App() {
       {/* ── TOP ROLES ── */}
       <section className="top-roles-section" id="top-roles">
         <div className="section-inner">
-          <h2 className="section-title reveal">Top paying roles in {form.work_year}</h2>
-          <p className="section-sub reveal">US senior level · gross salary · inflation-adjusted to {form.work_year}</p>
+          <h2 className="section-title reveal">Higher-paying roles in the current dataset</h2>
+          <p className="section-sub reveal">These are rough senior-level US market estimates for {form.work_year}, before country-specific adjustments.</p>
           <div className="top-roles-grid reveal">
             {topRoles.map((role,i)=>{
               const rd=getRoleData(role.title)
@@ -971,11 +890,10 @@ export default function App() {
       <section className="scope-section reveal">
         <div className="glass scope-card">
           <p className="scope-eyebrow">Coverage note</p>
-          <h2 className="scope-title">Built around technical and data salary signals.</h2>
+          <h2 className="scope-title">This product is meant for technical and data jobs.</h2>
           <p className="scope-copy">
-            PayLens is trained and tuned around technical careers such as data science, machine learning, analytics engineering,
-            BI, software, and nearby specialist roles. If a role sits far outside that world, the estimate may be less reliable than
-            it is for core tech and data positions.
+            PayLens is trained around jobs like data science, machine learning, analytics engineering, BI, software, and nearby specialist roles.
+            If you use it for a job far outside that group, the estimate is more likely to be off.
           </p>
         </div>
       </section>
@@ -983,27 +901,27 @@ export default function App() {
       <section className="how-section reveal" id="how-it-works">
         <div className="section-inner">
           <h2 className="section-title">How PayLens works</h2>
-          <p className="section-sub">A portfolio-grade ML workflow, not just a static salary calculator.</p>
+          <p className="section-sub">The app uses a trained model, then adds the extra context people usually have to figure out on their own.</p>
           <div className="how-grid">
             <div className="glass how-card">
               <span className="how-step">01</span>
               <h3>Real salary dataset</h3>
-              <p>PayLens starts from a real data science and technical salary dataset covering role, seniority, location, remote ratio, company size, and employment type.</p>
+              <p>PayLens starts with a real salary dataset for technical roles, including job title, experience level, location, remote ratio, company size, and employment type.</p>
             </div>
             <div className="glass how-card">
               <span className="how-step">02</span>
               <h3>Random Forest model</h3>
-              <p>The backend serves a trained Random Forest regression model that estimates salary from encoded feature inputs rather than using fixed rules.</p>
+              <p>The backend runs a trained Random Forest model to estimate salary from the input profile instead of relying on a simple lookup table.</p>
             </div>
             <div className="glass how-card">
               <span className="how-step">03</span>
               <h3>Context adjustments</h3>
-              <p>The raw prediction is translated into something more useful with tax, cost-of-living, demand, competition, inflation, and regional market context.</p>
+              <p>The raw estimate is then adjusted with tax, cost of living, demand, competition, inflation, and country-specific market context.</p>
             </div>
             <div className="glass how-card">
               <span className="how-step">04</span>
               <h3>Live UX layer</h3>
-              <p>Results are presented with live FX conversion, confidence guidance, scenario toggles, and mobile-friendly interaction so the output feels actionable.</p>
+              <p>The result is shown with a salary range, take-home estimate, live FX conversion, and a few toggles that make the number easier to interpret.</p>
             </div>
           </div>
         </div>
@@ -1125,11 +1043,11 @@ export default function App() {
                   <Tooltip formatter={v=>[`$${v.toLocaleString()}`,"US avg"]} contentStyle={{background:"#1e293b",border:"none",borderRadius:8,color:"#f1f5f9",fontSize:11}}/>
                   <Line type="monotone" dataKey="salary" stroke="#10b981" strokeWidth={2}
                     dot={p=>p.payload.year>2023
-                      ?<circle key={p.key} cx={p.cx} cy={p.cy} r={3} fill="#06b6d4" stroke="none"/>
+                      ?<circle key={p.key} cx={p.cx} cy={p.cy} r={3} fill="#10b981" stroke="none"/>
                       :<circle key={p.key} cx={p.cx} cy={p.cy} r={2} fill="#10b981" stroke="none"/>}/>
                 </LineChart>
               </ResponsiveContainer>
-              <p className="trend-note">Green = historical · <span style={{color:"#06b6d4"}}>Blue</span> = projected</p>
+              <p className="trend-note">The line shows how this role has moved from 2020 through the 2026 view used in the app.</p>
             </div>
 
             <button className="predict-btn" onClick={handleSubmit} disabled={loading}>
@@ -1245,7 +1163,7 @@ export default function App() {
                     <Tooltip formatter={v=>[`${sym}${v.toLocaleString()}`,"Salary"]}
                       contentStyle={{background:"#1e293b",border:"none",borderRadius:8,color:"#f1f5f9",fontSize:11}}/>
                     <Bar dataKey="value" radius={[6,6,0,0]}>
-                      <Cell fill="#334155"/><Cell fill="#10b981"/><Cell fill="#06b6d4"/><Cell fill="#334155"/>
+                      <Cell fill="#334155"/><Cell fill="#10b981"/><Cell fill="#1b8a5b"/><Cell fill="#334155"/>
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
@@ -1323,7 +1241,7 @@ export default function App() {
               <div className="about-left reveal">
                 <BrandLockup variant="about" className="about-brand" />
                 <h2>Biswaranjan Nayak</h2>
-                <p className="about-bio">Built PayLens as a full-stack ML project — from raw dataset exploration and model training in Python, to a FastAPI backend with live FX integration, to this React frontend with a 10-factor adjustment engine. The goal: honest, context-aware salary estimates grounded in real economics — not glazed benchmarks.</p>
+                <p className="about-bio">I built PayLens as a full-stack machine learning project. It starts with salary data and model training in Python, serves predictions through FastAPI, and turns them into a usable product with this React frontend. The goal was simple: make salary estimates feel more honest and more useful than a generic benchmark page.</p>
               <div className="about-links">
                 <a href="https://www.linkedin.com/in/biswaranjan-nayak-063809299/" target="_blank" rel="noreferrer" className="about-link linkedin">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>

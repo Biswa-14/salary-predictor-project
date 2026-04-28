@@ -987,3 +987,447 @@ footer[id] {
     grid-template-columns: 1fr;
   }
 }
+
+:root {
+  --green: #2a8a5d;
+  --green-d: #1f6d49;
+  --green-dim: rgba(42, 138, 93, 0.14);
+  --cyan: #2a8a5d;
+  --dark: #101214;
+  --dark2: #15181b;
+  --dark3: #1a1e22;
+  --dark4: #2b3138;
+  --text: #f5f7f8;
+  --muted: #7f8a96;
+  --muted2: #b2bcc6;
+  --glass: #171b1f;
+  --glass-b: #2a3138;
+}
+
+html {
+  background: var(--dark);
+}
+
+body,
+.app,
+input,
+button,
+select,
+textarea {
+  font-family: "Manrope", "Segoe UI", sans-serif;
+}
+
+body {
+  background: var(--dark);
+  color: var(--text);
+  line-height: 1.56;
+}
+
+.scroll-progress,
+.mesh-canvas,
+.particle-canvas {
+  display: none !important;
+}
+
+.reveal,
+.reveal.revealed,
+.animate-in {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+.nav {
+  top: 0;
+  padding: 0.9rem 1.5rem;
+  background: #101214;
+  border-bottom: 1px solid var(--glass-b);
+  backdrop-filter: none;
+}
+
+.nav-scrolled {
+  padding: 0.9rem 1.5rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-link-btn {
+  background: transparent;
+  border: 1px solid var(--glass-b);
+  color: var(--muted2);
+}
+
+.nav-link-btn:hover,
+.nav-link-btn:focus-visible {
+  background: rgba(42, 138, 93, 0.1);
+  border-color: rgba(42, 138, 93, 0.36);
+  color: var(--text);
+  transform: none;
+}
+
+.hero,
+.features,
+.top-roles-section,
+.scope-section,
+.how-section,
+.predictor,
+.history-section,
+.about-section {
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+}
+
+.hero {
+  min-height: auto;
+  padding-top: 8.5rem;
+  background: none;
+}
+
+.hero-content {
+  max-width: 760px;
+}
+
+.hero-content h1 {
+  font-size: clamp(2.8rem, 7vw, 4.8rem);
+  line-height: 1.04;
+}
+
+.hero-content p,
+.section-sub,
+.scope-copy,
+.about-bio,
+.how-card p,
+.regional-text,
+.insight-item {
+  line-height: 1.58;
+}
+
+.gradient-text {
+  background: none;
+  color: var(--text);
+  -webkit-text-fill-color: currentColor;
+}
+
+.badge {
+  background: transparent;
+  border: 1px solid rgba(42, 138, 93, 0.3);
+  color: var(--green);
+}
+
+.btn-primary,
+.btn-ghost,
+.predict-btn,
+.share-btn,
+.reload-btn,
+.reload-btn-inline,
+.cur-pill,
+.period-pill,
+.col-toggle-btn {
+  border-radius: 10px;
+}
+
+.btn-primary,
+.predict-btn {
+  background: var(--green);
+}
+
+.btn-primary:hover,
+.predict-btn:hover:not(:disabled) {
+  background: var(--green-d);
+  transform: none;
+}
+
+.btn-ghost {
+  color: var(--text);
+  border-color: var(--glass-b);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: rgba(42, 138, 93, 0.36);
+  transform: none;
+}
+
+.hero-stats {
+  gap: 2rem;
+  margin-top: 3rem;
+  padding-top: 0;
+  border-top: none;
+}
+
+.hstat strong {
+  color: var(--text);
+}
+
+.glass,
+.trend-box,
+.col-toggle-bar,
+.regional-box,
+.insight-box,
+.hype-meter,
+.scope-card,
+.how-card,
+.metric-card,
+.proof-card,
+.job-picker-menu {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-b) !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.scope-card,
+.how-card,
+.metric-card,
+.proof-card,
+.form-panel,
+.result-card,
+.history-card,
+.tech-stack-card,
+.feedback-card {
+  border-radius: 14px;
+}
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.proof-card {
+  padding: 1.5rem;
+}
+
+.proof-eyebrow {
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 0.85rem;
+}
+
+.proof-card h3 {
+  font-size: 1.22rem;
+  margin-bottom: 1rem;
+}
+
+.proof-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.proof-values div {
+  background: #111519;
+  border: 1px solid var(--glass-b);
+  border-radius: 12px;
+  padding: 0.9rem;
+}
+
+.proof-label {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.proof-values strong {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.proof-note {
+  color: var(--muted2);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.proof-metrics {
+  display: grid;
+  gap: 1rem;
+}
+
+.metric-card {
+  padding: 1.2rem;
+}
+
+.metric-card strong {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.metric-card span {
+  color: var(--muted2);
+  line-height: 1.5;
+}
+
+.top-roles-grid,
+.history-grid,
+.how-grid,
+.field-grid,
+.predictor-grid,
+.about-grid {
+  gap: 1rem;
+}
+
+.role-card,
+.history-card,
+.about-link {
+  transform: none !important;
+}
+
+.role-card:hover,
+.about-link:hover {
+  border-color: var(--glass-b);
+}
+
+.trend-box,
+.col-toggle-bar,
+.regional-box,
+.insight-box,
+.take-home-row,
+.hype-meter {
+  border-radius: 14px;
+}
+
+.trend-note,
+.fx-note,
+.field-help {
+  color: var(--muted);
+}
+
+.col-toggle-btn {
+  border: 1px solid var(--glass-b);
+  letter-spacing: 0;
+}
+
+.col-on {
+  background: rgba(42, 138, 93, 0.14);
+  color: var(--green);
+  border-color: rgba(42, 138, 93, 0.32);
+}
+
+.col-off {
+  background: transparent;
+  color: var(--muted2);
+  border-color: var(--glass-b);
+}
+
+.col-toggle-btn:hover {
+  transform: none;
+}
+
+.take-home-row {
+  background: rgba(42, 138, 93, 0.08);
+  border-color: rgba(42, 138, 93, 0.2);
+}
+
+.take-home-val,
+.confidence-pill,
+.rs-val,
+.tech-name,
+.role-avg,
+.salary-amount {
+  color: var(--green);
+}
+
+.range-fill {
+  background: var(--green);
+}
+
+.range-dot {
+  background: var(--green);
+}
+
+.insight-box {
+  background: var(--glass) !important;
+}
+
+.hype-yoy,
+.role-yoy {
+  color: var(--text) !important;
+}
+
+.period-pill.active,
+.cur-pill.active {
+  background: rgba(42, 138, 93, 0.14);
+  border-color: rgba(42, 138, 93, 0.32);
+  color: var(--text);
+}
+
+.share-btn:hover,
+.reload-btn:hover,
+.reload-btn:focus-visible {
+  transform: none;
+}
+
+.about-link,
+.fb-field input,
+.fb-field textarea,
+select,
+.job-picker input {
+  background: #111519;
+  border-color: var(--glass-b);
+}
+
+.about-bio,
+.scope-copy,
+.how-card p,
+.proof-note {
+  max-width: 70ch;
+}
+
+@media (max-width: 900px) {
+  .proof-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .proof-values {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav {
+    padding: 0.9rem 1rem;
+    align-items: center;
+  }
+
+  .nav-scrolled {
+    padding: 0.9rem 1rem;
+  }
+
+  .nav-logo {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero {
+    padding-top: 9.75rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .hero-actions {
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    width: 100%;
+    justify-content: center;
+  }
+}
