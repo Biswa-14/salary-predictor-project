@@ -19,12 +19,12 @@ const DEFAULT_FORM = {
   work_year:        2026,
 }
 
-const MOBILE_NAV_ITEMS = [
-  { id: "home", label: "Home" },
-  { id: "features", label: "What it shows" },
-  { id: "how-it-works", label: "How it works" },
-  { id: "predictor", label: "Predict" },
-  { id: "about", label: "About" },
+const NAV_ITEMS = [
+  { id: "home", label: "Home", shortLabel: "Home" },
+  { id: "features", label: "What it shows", shortLabel: "Shows" },
+  { id: "how-it-works", label: "How it works", shortLabel: "How" },
+  { id: "predictor", label: "Predict", shortLabel: "Predict" },
+  { id: "about", label: "About", shortLabel: "About" },
 ]
 
 const CURRENCIES = {
@@ -490,7 +490,7 @@ function FeedbackForm(){
       setStatus(r.ok?"sent":"error")
     }catch{setStatus("error")}
   }
-  if(status==="sent")return(<div className="feedback-success"><div className="feedback-success-icon">✓</div><h3>Thanks!</h3><p>Biswaranjan will read this.</p></div>)
+  if(status==="sent")return(<div className="feedback-success"><div className="feedback-success-icon">✓</div><h3>Thanks!</h3><p>The PayLens team will read this.</p></div>)
   return(
     <form className="feedback-form" onSubmit={handleSubmit}>
       <div className="fb-row">
@@ -786,13 +786,14 @@ export default function App() {
       <BackgroundPaperShaders />
       {/* ── NAV ── */}
       <nav className={`nav ${navScrolled?"nav-scrolled":""}`}>
-          <button className="nav-logo nav-logo-btn" onClick={()=>scrollToSection("about")} aria-label="Go to about section">
+          <button className="nav-logo nav-logo-btn" onClick={()=>scrollToSection("home")} aria-label="Go to home section">
             <BrandLockup variant="nav" />
           </button>
         <div className="nav-links">
-          {MOBILE_NAV_ITEMS.map(item=>(
+          {NAV_ITEMS.map(item=>(
             <button key={item.id} className="nav-link-btn" onClick={()=>scrollToSection(item.id)}>
-              {item.label}
+              <span className="nav-label-full">{item.label}</span>
+              <span className="nav-label-short">{item.shortLabel}</span>
             </button>
           ))}
         </div>
@@ -1242,21 +1243,21 @@ export default function App() {
             <div className="about-grid">
               <div className="about-left reveal">
                 <BrandLockup variant="about" className="about-brand" />
-                <h2>Biswaranjan Nayak</h2>
-                <p className="about-bio">I built PayLens as a full-stack machine learning project. It starts with salary data and model training in Python, serves predictions through FastAPI, and turns them into a usable product with this React frontend. The goal was simple: make salary estimates feel more honest and more useful than a generic benchmark page.</p>
-              <div className="about-links">
-                <a href="https://www.linkedin.com/in/biswaranjan-nayak-063809299/" target="_blank" rel="noreferrer" className="about-link linkedin">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                  LinkedIn — Biswaranjan Nayak
-                </a>
-                <a href="https://github.com/Biswa-14" target="_blank" rel="noreferrer" className="about-link github">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-                  GitHub — Biswa-14
-                </a>
-                <a href="mailto:biswanyk14@outlook.com" className="about-link email">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                  biswanyk14@outlook.com
-                </a>
+                <h2>Built by the PayLens team</h2>
+                <p className="about-bio">PayLens is a group full-stack machine learning project. It starts with salary data and model training in Python, serves predictions through FastAPI, and turns the result into a usable React product with salary context, cost-of-living adjustments, tax estimates, and live currency conversion.</p>
+              <div className="about-points">
+                <div className="about-point">
+                  <strong>Machine learning</strong>
+                  <span>Model training, feature encoding, validation, and prediction logic.</span>
+                </div>
+                <div className="about-point">
+                  <strong>Product engineering</strong>
+                  <span>FastAPI endpoints, React workflows, responsive UI, and deployment setup.</span>
+                </div>
+                <div className="about-point">
+                  <strong>Salary intelligence</strong>
+                  <span>Regional context, take-home estimates, role demand, and market notes.</span>
+                </div>
               </div>
             </div>
             <div className="about-right reveal">
@@ -1280,7 +1281,7 @@ export default function App() {
               </div>
               <div className="feedback-card glass">
                 <h3>Leave feedback</h3>
-                <p>Suggestions, bugs, ideas — I read every message.</p>
+                <p>Suggestions, bugs, and ideas help the team improve the product.</p>
                 <FeedbackForm/>
               </div>
             </div>

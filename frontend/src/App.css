@@ -1085,6 +1085,7 @@ body {
 .hero {
   min-height: auto;
   padding-top: 8.5rem;
+  overflow: hidden;
   background: none;
 }
 
@@ -1460,7 +1461,199 @@ select,
   background: rgba(16, 18, 20, 0.62);
 }
 
-.app > *:not(.background-video-wrap) {
+.hero,
+.features,
+.top-roles-section,
+.scope-section,
+.how-section,
+.predictor,
+.history-section,
+.about-section,
+footer {
   position: relative;
   z-index: 1;
+}
+
+/* Final responsive nav + team about overrides */
+.nav {
+  position: fixed;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  min-height: clamp(72px, 7vw, 88px);
+  padding: clamp(0.72rem, 1.15vw, 0.95rem) clamp(1rem, 3vw, 2.5rem);
+}
+
+.nav-scrolled {
+  padding: clamp(0.72rem, 1.15vw, 0.95rem) clamp(1rem, 3vw, 2.5rem);
+}
+
+.nav-logo {
+  min-width: 0;
+  max-width: min(44vw, 430px);
+}
+
+.brand-lockup-nav {
+  gap: clamp(0.55rem, 1vw, 0.85rem);
+}
+
+.brand-lockup-nav .brand-mark {
+  width: clamp(42px, 4.2vw, 58px);
+  height: clamp(42px, 4.2vw, 58px);
+}
+
+.brand-lockup-nav .brand-wordmark {
+  font-size: clamp(1.18rem, 2.1vw, 1.75rem);
+}
+
+.brand-lockup-nav .brand-motto {
+  max-width: clamp(180px, 28vw, 360px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: clamp(0.52rem, 0.78vw, 0.72rem);
+}
+
+.nav-links {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(0.35rem, 0.8vw, 0.65rem);
+}
+
+.nav-link-btn {
+  min-height: clamp(38px, 3.4vw, 44px);
+  padding: clamp(0.46rem, 0.85vw, 0.62rem) clamp(0.65rem, 1.2vw, 1rem);
+  font-size: clamp(0.78rem, 1vw, 0.92rem);
+  white-space: nowrap;
+}
+
+.nav-label-short {
+  display: none;
+}
+
+.about-points {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.about-point {
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--glass-b);
+  border-radius: 14px;
+  background: #111519;
+}
+
+.about-point strong {
+  display: block;
+  margin-bottom: 0.28rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.about-point span {
+  display: block;
+  color: var(--muted2);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 760px) {
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: auto;
+    padding: 0.78rem 1rem;
+  }
+
+  .nav-scrolled {
+    padding: 0.78rem 1rem;
+  }
+
+  .nav-logo {
+    width: 100%;
+    max-width: none;
+    justify-content: center;
+  }
+
+  .brand-lockup-nav .brand-copy {
+    align-items: center;
+  }
+
+  .brand-lockup-nav .brand-motto {
+    max-width: 280px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .nav-links {
+    width: 100%;
+    flex: 0 1 auto;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero {
+    padding-top: clamp(9.25rem, 25vw, 11rem);
+  }
+}
+
+@media (max-width: 520px) {
+  .nav {
+    gap: 0.55rem;
+    padding: 0.68rem 0.75rem;
+  }
+
+  .nav-scrolled {
+    padding: 0.68rem 0.75rem;
+  }
+
+  .brand-lockup-nav .brand-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-lockup-nav .brand-wordmark {
+    font-size: 1.08rem;
+  }
+
+  .brand-lockup-nav .brand-motto {
+    display: none;
+  }
+
+  .nav-links {
+    gap: 0.35rem;
+  }
+
+  .nav-link-btn {
+    min-height: 34px;
+    padding: 0.42rem 0.56rem;
+    font-size: 0.75rem;
+  }
+
+  .nav-label-full {
+    display: none;
+  }
+
+  .nav-label-short {
+    display: inline;
+  }
+
+  .hero {
+    padding-top: 8.2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-link-btn {
+    padding-inline: 0.48rem;
+    font-size: 0.72rem;
+  }
+
+  .hero {
+    padding-top: 8.7rem;
+  }
 }
