@@ -1461,6 +1461,21 @@ select,
   background: rgba(16, 18, 20, 0.62);
 }
 
+.background-video-overlay::after {
+  content: "";
+  position: fixed;
+  left: 50%;
+  top: 52%;
+  width: min(420px, 46vw);
+  height: min(130px, 18vh);
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at center, rgba(16, 18, 20, 0.92) 0%, rgba(16, 18, 20, 0.72) 46%, rgba(16, 18, 20, 0) 76%);
+  filter: blur(12px);
+  opacity: 0.94;
+}
+
 .hero,
 .features,
 .top-roles-section,
