@@ -490,7 +490,7 @@ function FeedbackForm(){
       setStatus(r.ok?"sent":"error")
     }catch{setStatus("error")}
   }
-  if(status==="sent")return(<div className="feedback-success"><div className="feedback-success-icon">✓</div><h3>Thanks!</h3><p>The PayLens team will read this.</p></div>)
+  if(status==="sent")return(<div className="feedback-success"><div className="feedback-success-icon">✓</div><h3>Thanks!</h3><p>I will read this feedback.</p></div>)
   return(
     <form className="feedback-form" onSubmit={handleSubmit}>
       <div className="fb-row">
@@ -1243,8 +1243,12 @@ export default function App() {
             <div className="about-grid">
               <div className="about-left reveal">
                 <BrandLockup variant="about" className="about-brand" />
-                <h2>Built by the PayLens team</h2>
-                <p className="about-bio">PayLens is a group full-stack machine learning project. It starts with salary data and model training in Python, serves predictions through FastAPI, and turns the result into a usable React product with salary context, cost-of-living adjustments, tax estimates, and live currency conversion.</p>
+                <h2>Built by Biswaranjan Nayak</h2>
+                <p className="about-bio">PayLens is my full-stack machine learning project. I built the salary data workflow and model training in Python, served predictions through FastAPI, and turned the result into a usable React product with salary context, cost-of-living adjustments, tax estimates, and live currency conversion.</p>
+              <div className="about-links">
+                <a className="about-link linkedin" href="https://www.linkedin.com/in/biswaranjan-nayak-063809299/" target="_blank" rel="noreferrer">LinkedIn: Biswaranjan Nayak</a>
+                <a className="about-link github" href="https://github.com/Biswa-14" target="_blank" rel="noreferrer">GitHub: Biswa-14</a>
+              </div>
               <div className="about-points">
                 <div className="about-point">
                   <strong>Machine learning</strong>
@@ -1281,7 +1285,7 @@ export default function App() {
               </div>
               <div className="feedback-card glass">
                 <h3>Leave feedback</h3>
-                <p>Suggestions, bugs, and ideas help the team improve the product.</p>
+                <p>Suggestions, bugs, and ideas help me improve the product.</p>
                 <FeedbackForm/>
               </div>
             </div>
